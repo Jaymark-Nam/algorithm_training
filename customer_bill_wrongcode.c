@@ -36,7 +36,7 @@ void main()
 
 	do {
 		printf("\nselect what you want to do?\n");
-		ch = getche();                    //getche ??
+		ch = getche();                    //getche ?? getche() function is a function which waits for any character input from keyboard and it will also echo the input character on to the output screen.
 	} while (ch <= '0' || ch > '3');
 
 	switch (ch)
@@ -73,8 +73,8 @@ void main()
 void input()
 {
 	FILE *fp = fopen("Jaewoo.dat", "rb");
-	fseek(fp, 0, SEEK_END);
-	tl = ftell(fp);
+	fseek(fp, 0, SEEK_END);			// // 파일 포인터를 파일의 끝으로 이동시킴
+	tl = ftell(fp);				// = ftell(fp);          // 파일 포인터의 현재 위치를 얻음
 	sl = sizeof(customer);
 	ts = tl / sl;
 	fseek(fp, (ts - 1)*sl, SEEK_SET);
@@ -133,7 +133,7 @@ void search()
 		printf("\n enter your choice");
 		ch = getche();
 
-	} while (ch != '1' && ch != '2');
+	} while (ch != '1' && ch != '2');		// !1, !2면 항상 루트를 돌린다는뜻
 	switch (ch)
 	{
 	case '1':
