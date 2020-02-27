@@ -11,6 +11,10 @@
 
 void mainmenu();
 void addbooks();
+int getdata();
+int checkid(int);
+
+
 char catagories[][15] = { "Computer","Electronics","Electrical","Civil","Mechnnical","Architecture" };
 
 FILE *fp, *ft, *fs;
@@ -162,7 +166,23 @@ void addbooks()
 	scanf("%d", &s);
 	if (s == 7)
 		mainmenu();
-	
+
+	system("cls");
+	fp = fopen("Bibek.dat", "ab+");
+	if (getdata() == 1)
+	{
+		a.cat = catagories[s - 1];
+		fseek(fp, 0, SEEK_END);
+		fwrite(&a, sizeof(a), 1,  fp);
+		fclose(fp);
+		gotoxy(21, 15);
+		printf("Save anymore? y.n");
+		if (getch() == 'n')
+			mainmenu();
+		else
+			system("cls");
+		addbooks();
+	}
 }
 
 void Password()
@@ -219,6 +239,69 @@ void Password()
 		Password();		//To password menu again!
 	}
 }
+
+
+
+int getdata()		//whats the data I wanna add?
+{
+	int t;
+	gotoxy(20, 3);
+	printf("Enter the information below");
+
+	gotoxy(21, 5);
+	printf("Category");
+	gotoxy(31, 5);
+	printf("%s", catagories[s - 1]);
+
+
+	gotoxy(21, 6);
+	printf("Book ID:\t");
+	gotoxy(30, 6);
+	scanf("%d", &t);
+
+	
+	if (checkid(t) == 0)
+	{
+		gotoxy(21, 13);
+		printf("The book id already exists");
+		getch(); mainmenu(); return 0;
+	}
+	a.id = t;
+
+
+	gotoxy(21, 7);
+	printf("Book Name:"); gotoxy(33, 7);
+	scanf("%s", a.name);
+
+	gotoxy(21, 8);
+	printf("Author:"); gotoxy(30, 8);
+	scanf("%s", a.Author);
+
+	gotoxy(21, 9);
+	printf("Quantity:"); gotoxy(31, 9);
+	scanf("%d", &a.quantity);
+
+	gotoxy(21, 10);
+	printf("Price:"); gotoxy(28, 10);
+	scanf("%f", &a.Price);
+
+	gotoxy(21, 11);
+	printf("Rack No:"); gotoxy(30, 11);
+	scanf("%d", &a.rackno);
+	return 1;
+}
+
+int checkid(int t)
+{
+	rewind(fp);
+	while (fread(&a, sizeof(a), 1, fp) == 1)
+		if (a.id == t)
+			return 0; // if book exists
+	return 1; //return 1 if it doesnt exist
+}
+
+
+
 
 int main()
 {
