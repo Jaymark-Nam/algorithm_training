@@ -1,4 +1,3 @@
-
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
@@ -10,6 +9,8 @@
 
 #define RETURNTIME 15
 
+void mainmenu();
+void addbooks();
 char catagories[][15] = { "Computer","Electronics","Electrical","Civil","Mechnnical","Architecture" };
 
 FILE *fp, *ft, *fs;
@@ -72,12 +73,12 @@ void mainmenu()
 	gotoxy(20, 19);
 
 	printf("Enter your choice:");
-	
+
 	choose = getch();
 	switch (choose)
 	{
 	case '1':
-
+		addbooks();
 	case '2':
 
 	case '3':
@@ -102,23 +103,67 @@ void mainmenu()
 
 		gotoxy(50, 17);
 		printf("Library Management System");
-		
+
 		gotoxy(50, 19);
 		for (i = 0; i < 20; i++)
 		{
 			Sleep(50);
 			printf("*");
 		}
-		
+
 		gotoxy(50, 30);
 		printf("Exiting in 3 second...........>");
 		Sleep(3000);
 		exit(0);
 	}
+	/*
+	default:
+	{
+		gotoxy(10, 23);
+		printf("Wrong entry!!");
+		if (getch())
+			mainmenu();
+	}*/
 	}
 
 }
 
+
+void addbooks()
+{
+	system("cls");
+	int i;
+	gotoxy(20, 5);
+	printf("Select categories");
+
+	gotoxy(20, 7);
+	printf("1. Computer");
+
+	gotoxy(20, 9);
+	printf("2. Electronics");
+
+	gotoxy(20, 11);
+	printf("3. Electrical");
+
+	gotoxy(20, 13);
+	printf("4. Civil");
+
+	gotoxy(20, 15);
+	printf("5. Mechanical");
+
+	gotoxy(20, 17);
+	printf("6. Architecture");
+
+	gotoxy(20, 19);
+	printf("7. Back to Main menu");
+
+	gotoxy(20, 22);
+	printf("Enter your choice");
+	scanf("%d", &s);
+	if (s == 7)
+		mainmenu();
+	
+}
 
 void Password()
 {
@@ -156,9 +201,9 @@ void Password()
 	}
 	*/
 	scanf("%s", pass);
-	
-	
-	if(strcmp(pass,password)==0)
+
+
+	if (strcmp(pass, password) == 0)
 	{
 		gotoxy(50, 15);
 		printf("***Password match!!***");
@@ -181,5 +226,4 @@ int main()
 	getch();
 	return 0;
 };
-
 
