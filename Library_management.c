@@ -8,7 +8,7 @@
 #include <time.h>
 
 #define RETURNTIME 15
-
+/* */
 void mainmenu();
 void addbooks();
 int getdata();
