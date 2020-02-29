@@ -11,6 +11,7 @@
 /* */
 void mainmenu();
 void addbooks();
+void deletebooks();
 int getdata();
 int checkid(int);
 
@@ -84,7 +85,7 @@ void mainmenu()
 	case '1':
 		addbooks();
 	case '2':
-
+		deletebooks();
 	case '3':
 
 	case '4':
@@ -123,10 +124,10 @@ void mainmenu()
 	/*
 	default:
 	{
-		gotoxy(10, 23);
-		printf("Wrong entry!!");
-		if (getch())
-			mainmenu();
+	gotoxy(10, 23);
+	printf("Wrong entry!!");
+	if (getch())
+	mainmenu();
 	}*/
 	}
 
@@ -173,7 +174,7 @@ void addbooks()
 	{
 		a.cat = catagories[s - 1];
 		fseek(fp, 0, SEEK_END);
-		fwrite(&a, sizeof(a), 1,  fp);
+		fwrite(&a, sizeof(a), 1, fp);
 		fclose(fp);
 		gotoxy(21, 15);
 		printf("Save anymore? y.n");
@@ -183,6 +184,80 @@ void addbooks()
 			system("cls");
 		addbooks();
 	}
+}
+
+void deletebooks()
+{
+	system("cls");
+	int d;
+	char another = 'y';
+	while (another == 'y')	//infinite loop
+	{
+		system("cls");
+		gotoxy(10, 5);
+		printf("Enter book ID to delete");
+		scanf("%d", &d);
+		fp = fopen("Bibek.dat", "rb+");
+		rewind(fp);
+		while (fread(&a, sizeof(a), 1, fp) == 1)
+		{
+			if (a.id == d)
+			{
+				gotoxy(10, 7);
+				printf("The book record is useful");
+
+				gotoxy(10, 8);
+				printf("Book name is %s", a.name);
+
+				gotoxy(10, 9);
+				printf("Rack No. is %d", a.rackno);
+				findbook = 't';
+			}
+		}
+		if (findbook != 't')
+		{
+			gotoxy(10, 10);
+			printf("No record is found!");
+			if (getch())
+				mainmenu();
+		}
+		if (findbook == 't')
+		{
+			gotoxy(10, 9);
+			printf("Do you want to delete? y.n");
+			if (getch() == 'y')
+			{
+				ft = fopen("test.dat", "wb+");	//temp file for delete
+				rewind(fp);
+				while (fread(&a, sizeof(a), 1, fp) == 1)
+				{
+					if (a.id != d)
+					{
+						fseek(ft, 0, SEEK_CUR);
+						fwrite(&a, sizeof(a), 1, ft);	//write all in temp fil exept that we wanna delete
+					}
+				}
+				fclose(ft);
+				fclose(fp);
+				remove("Bibek.dat");
+				rename("test.dat", "Bibek.dat");	//copy all item from temp fil to fp except that
+				fp = fopen("Bibek.dat", "rb+");	//we wanna delete
+				if (findbook == 't')
+				{
+					gotoxy(10, 10);
+					printf("The record is successfully deleted");
+					gotoxy(10, 11);
+					printf("Delete another record? y.n");
+				}
+			}
+			else
+				mainmenu();
+			fflush(stdin);
+			another = getch();
+		}
+	}
+	gotoxy(10, 15);
+	mainmenu();
 }
 
 void Password()
@@ -259,7 +334,7 @@ int getdata()		//whats the data I wanna add?
 	gotoxy(30, 6);
 	scanf("%d", &t);
 
-	
+
 	if (checkid(t) == 0)
 	{
 		gotoxy(21, 13);
