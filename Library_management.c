@@ -169,7 +169,7 @@ void addbooks()
 		mainmenu();
 
 	system("cls");
-	fp = fopen("Bibek.dat", "ab+");
+	fp = fopen("Bibek.dat", "ab+");	/*add file in "BIBEK.DAT".....   ab+ : Open a binary file in append mode for reading or updating at the end of the file. fopen() creates the file if it does not exist.   */
 	if (getdata() == 1)
 	{
 		a.cat = catagories[s - 1];
@@ -197,9 +197,9 @@ void deletebooks()
 		gotoxy(10, 5);
 		printf("Enter book ID to delete");
 		scanf("%d", &d);
-		fp = fopen("Bibek.dat", "rb+");
+		fp = fopen("Bibek.dat", "rb+");  //Open fp,  BIBEK.DAT for both reading and writing in binary mode.
 		rewind(fp);
-		while (fread(&a, sizeof(a), 1, fp) == 1)
+		while (fread(&a, sizeof(a), 1, fp) == 1)	
 		{
 			if (a.id == d)
 			{
@@ -227,21 +227,21 @@ void deletebooks()
 			printf("Do you want to delete? y.n");
 			if (getch() == 'y')
 			{
-				ft = fopen("test.dat", "wb+");	//temp file for delete
+				ft = fopen("test.dat", "wb+");	//ft === temp file for delete  ...  wb indicates that the file is opened for writing in binary mode.
 				rewind(fp);
-				while (fread(&a, sizeof(a), 1, fp) == 1)
+				while (fread(&a, sizeof(a), 1, fp) == 1)		//while you're reading "fp"
 				{
-					if (a.id != d)
+					if (a.id != d)		//files that you didnt choose
 					{
-						fseek(ft, 0, SEEK_CUR);
-						fwrite(&a, sizeof(a), 1, ft);	//write all in temp fil exept that we wanna delete
+						fseek(ft, 0, SEEK_CUR);	// ft!!  fseek() is used to move file pointer associated with a given file to a specific position
+						fwrite(&a, sizeof(a), 1, ft);	//write all in ft (temp fil)
 					}
 				}
 				fclose(ft);
 				fclose(fp);
 				remove("Bibek.dat");
 				rename("test.dat", "Bibek.dat");	//copy all item from temp fil to fp except that
-				fp = fopen("Bibek.dat", "rb+");	//we wanna delete
+				fp = fopen("Bibek.dat", "rb+");	
 				if (findbook == 't')
 				{
 					gotoxy(10, 10);
