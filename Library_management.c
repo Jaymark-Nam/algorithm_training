@@ -12,6 +12,7 @@
 void mainmenu();
 void addbooks();
 void deletebooks();
+void searchbooks();
 int getdata();
 int checkid(int);
 
@@ -87,7 +88,7 @@ void mainmenu()
 	case '2':
 		deletebooks();
 	case '3':
-
+		searchbooks();
 	case '4':
 
 	case '5':
@@ -199,7 +200,7 @@ void deletebooks()
 		scanf("%d", &d);
 		fp = fopen("Bibek.dat", "rb+");  //Open fp,  BIBEK.DAT for both reading and writing in binary mode.
 		rewind(fp);
-		while (fread(&a, sizeof(a), 1, fp) == 1)	
+		while (fread(&a, sizeof(a), 1, fp) == 1)
 		{
 			if (a.id == d)
 			{
@@ -241,7 +242,7 @@ void deletebooks()
 				fclose(fp);
 				remove("Bibek.dat");
 				rename("test.dat", "Bibek.dat");	//copy all item from temp fil to fp except that
-				fp = fopen("Bibek.dat", "rb+");	
+				fp = fopen("Bibek.dat", "rb+");
 				if (findbook == 't')
 				{
 					gotoxy(10, 10);
@@ -259,6 +260,131 @@ void deletebooks()
 	gotoxy(10, 15);
 	mainmenu();
 }
+
+
+
+void searchbooks()
+{
+	system("cls");
+	int d;
+	printf("*****************************Search Books*********************************");
+	gotoxy(20, 10);
+	printf("1. Search by ID");
+	gotoxy(20, 14);
+	printf("2. Search by Name");
+	gotoxy(15, 20);
+	printf("Enter your choice");   //until here, when you open searchbooks(), it closes in 1 second
+
+	fp = fopen("Bibek.dat", "rb+");		//open file for reading
+	rewind(fp);		//move pointer to beginning of file
+
+	switch(getch())   //!!!! because of this, searchbooks() doesn't get quit in a second~
+	{
+	case '1':
+	{
+		system("cls");
+		gotoxy(25, 4);
+		printf("Search books by ID");
+
+		gotoxy(20, 5);
+		printf("Enter the book ID  :  ");
+		scanf("%d", &d);
+
+		gotoxy(20, 7);
+		printf("Searching..");
+
+		while (fread(&a, sizeof(a), 1, fp) == 1)		//while u are reading fp
+		{
+			if(a.id==d)
+			{
+				Sleep(2);
+				gotoxy(20, 7);
+				printf("The books is available");
+				gotoxy(20, 9);
+				printf("ID:%d", a.id);
+				gotoxy(20, 10);
+				printf("Name:%s", a.name);
+				gotoxy(20, 11);
+				printf("Author:%s ", a.Author);;
+				gotoxy(20, 12);
+				printf("Quantity:%d ", a.quantity);
+				gotoxy(20, 13);
+				printf("Price:Rs.%f", a.Price);
+				gotoxy(20, 14);
+				printf("Rack No:%d ", a.rackno);
+				findbook = 't';
+			}
+		}
+		if (findbook != 't')
+		{
+			gotoxy(22, 9);
+			printf("No record Found");
+		}
+		gotoxy(20, 17);
+		printf("Try another search y.n");
+		if (getch() == 'y')
+			searchbooks();
+		else
+			mainmenu();
+		break;
+	}
+
+	case '2':
+	{
+		char s[15];
+		system("cls");
+		gotoxy(25, 4);
+		printf("Search books by Name");
+
+		gotoxy(20, 5);
+		printf("Enter book Name  :  ");
+		
+		scanf("%s", s);
+		int d = 0;
+		while (fread(&a, sizeof(a), 1, fp) == 1)
+		{
+			if (strcmp(a.name, s) == 0)
+			{
+				gotoxy(20, 7);
+				printf("This book is available");
+
+				gotoxy(20, 9);
+				printf(" ID:%d", a.id); 
+				gotoxy(20, 10);
+				printf(" Name:%s", a.name);
+				gotoxy(20, 11);
+				printf(" Author:%s", a.Author);
+				gotoxy(20, 12);
+				printf(" Qantity:%d", a.quantity);
+				gotoxy(20, 13);
+				printf(" Price:Rs.%f", a.Price);
+				gotoxy(20, 14);
+				printf(" Rack No:%d ", a.rackno);
+				d++;
+			}
+		}
+		if (d == 0)
+		{
+			gotoxy(22, 9);
+			printf("No record");
+		}
+		gotoxy(20, 17);
+		printf("Try another search? y.n");
+		if (getch() == 'y')
+			searchbooks();
+		else mainmenu();
+		break;
+	}
+	default :
+		getch();
+		searchbooks();
+	}
+	fclose(fp);
+}
+
+
+
+
 
 void Password()
 {
@@ -384,4 +510,3 @@ int main()
 	getch();
 	return 0;
 };
-
