@@ -13,8 +13,10 @@ void mainmenu();
 void addbooks();
 void deletebooks();
 void searchbooks();
+void issuebooks();
 int getdata();
 int checkid(int);
+void returnfunc();
 
 
 char catagories[][15] = { "Computer","Electronics","Electrical","Civil","Mechnnical","Architecture" };
@@ -90,7 +92,7 @@ void mainmenu()
 	case '3':
 		searchbooks();
 	case '4':
-
+		issuebooks();
 	case '5':
 
 	case '6':
@@ -278,7 +280,7 @@ void searchbooks()
 	fp = fopen("Bibek.dat", "rb+");		//open file for reading
 	rewind(fp);		//move pointer to beginning of file
 
-	switch(getch())   //!!!! because of this, searchbooks() doesn't get quit in a second~
+	switch (getch())   //!!!! because of this, searchbooks() doesn't get quit in a second~
 	{
 	case '1':
 	{
@@ -295,7 +297,7 @@ void searchbooks()
 
 		while (fread(&a, sizeof(a), 1, fp) == 1)		//while u are reading fp
 		{
-			if(a.id==d)
+			if (a.id == d)
 			{
 				Sleep(2);
 				gotoxy(20, 7);
@@ -338,7 +340,7 @@ void searchbooks()
 
 		gotoxy(20, 5);
 		printf("Enter book Name  :  ");
-		
+
 		scanf("%s", s);
 		int d = 0;
 		while (fread(&a, sizeof(a), 1, fp) == 1)
@@ -349,7 +351,7 @@ void searchbooks()
 				printf("This book is available");
 
 				gotoxy(20, 9);
-				printf(" ID:%d", a.id); 
+				printf(" ID:%d", a.id);
 				gotoxy(20, 10);
 				printf(" Name:%s", a.name);
 				gotoxy(20, 11);
@@ -375,12 +377,152 @@ void searchbooks()
 		else mainmenu();
 		break;
 	}
-	default :
+	default:
 		getch();
 		searchbooks();
 	}
 	fclose(fp);
 }
+
+
+void issuebooks()
+{
+	int t;
+
+	system("cls");
+	printf("********************************ISSUE SECTION**************************");
+
+	gotoxy(10, 5);
+	printf("1. Issue a Book");
+	gotoxy(10, 7);
+	printf("2. View Issued Book");
+	gotoxy(10, 9);
+	printf("3. Search Issued Book");
+	gotoxy(10, 11);
+	printf("4. Remove Issued Book");
+	gotoxy(10, 14);
+	printf("Enter a Choice:");
+
+	switch (getch())
+	{
+	case '1':
+		system("cls");
+		int c = 0;
+		char another = 'y';
+		while (another == 'y')
+		{
+			system("cls");
+			gotoxy(15, 4);
+			printf("Issue Book Section");
+
+			gotoxy(10, 6);
+			printf("Enter the book Id  :  ");
+
+			scanf("%d", &t);
+
+			fp = fopen("Bibek.dat", "rb+");
+			fs = fopen("Issue.dat", "ab+");		//make Issue.dat
+
+			if (checkid(t) == 0)	//issues those which are present in library
+			{
+				gotoxy(10, 8);
+				printf("The book record is available");
+
+				gotoxy(10, 9);
+				printf("There are %d unissued books in library", a.quantity);
+
+				gotoxy(10, 10);
+				printf("The name of book is %s", a.name);
+
+				gotoxy(10, 11);
+				printf("Enter student name");
+				scanf("%s", a.stname);
+
+				gotoxy(10, 12);
+				printf("Issued date = %d %d %d", a.issued.dd, a.issued.mm, a.issued.yy);
+
+				gotoxy(10, 13);
+				printf("The book of ID %d is issued", a.id);
+
+				a.duedate.dd = a.issued.dd + RETURNTIME;
+				a.duedate.mm = a.issued.mm;
+				a.duedate.yy = a.issued.yy;
+
+				if (a.duedate.dd > 30)
+				{
+					a.duedate.mm = a.duedate.mm + a.duedate.dd / 30.;
+					a.duedate.dd = a.duedate.dd - 30;
+				}
+
+				if (a.duedate.mm > 12)
+				{
+					a.duedate.yy = a.duedate.yy +  a.duedate.mm / 12;
+					a.duedate.mm = a.duedate.mm - 12;
+				}
+
+				gotoxy(10, 14);
+				printf("To be return %d %d %d", a.duedate.dd, a.duedate.mm, a.duedate.yy);
+				fseek(fs, sizeof(a), SEEK_END);
+				fwrite(&a, sizeof(a), 1, fs);
+				fclose(fs);
+				c = 1;
+			}
+			if (c == 0)
+			{
+				gotoxy(10, 11);
+				printf("No record found");
+			}
+			gotoxy(10, 15);
+			printf("Issue any more? y.n ");
+			fflush(stdin);
+			another = getche();
+			fclose(fp);
+		}
+		break;
+	case '2':
+	{
+		system("cls");
+		int j = 4;
+		printf("*******************************Issued book list*******************************\n");
+		gotoxy(2, 2);
+		printf("STUDENT NAME    CATEGORY    ID    BOOK NAME    ISSUED DATE    RETURN DATE");
+		
+		fs = fopen("Issue.dat", "rb");			//open Issue.dat file
+		while (fread(&a, sizeof(a), 1, fs) == 1)
+		{
+			gotoxy(2, j);
+			printf("%s", a.stname);  //printf("Enter student name"); scanf("%s", a.stname);
+		
+			gotoxy(18, j);
+			printf("%s", a.cat);
+		
+			gotoxy(30, j);
+			printf("%d", a.id);
+
+			gotoxy(36, j);
+			printf("%s", a.name);
+
+			gotoxy(51, j);
+			printf("%d %d %d", a.issued.dd, a.issued.mm, a.issued.yy);
+
+			gotoxy(65, j);
+			printf("%d %d %d", a.duedate.dd, a.duedate.mm, a.duedate.yy);
+
+			j++;
+		}
+		fclose(fp);
+		gotoxy(1, 25);
+		returnfunc();
+	}
+	break;
+	
+	}
+}
+
+
+
+
+
 
 
 
@@ -501,7 +643,17 @@ int checkid(int t)
 	return 1; //return 1 if it doesnt exist
 }
 
-
+void returnfunc()
+{
+	{
+		printf("Press Enter to return main menu");
+	}
+a:
+	if (getch() == 13)		//allow only use of enter
+		mainmenu();
+	else
+		goto a;
+}
 
 
 int main()
