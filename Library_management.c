@@ -14,9 +14,11 @@ void addbooks();
 void deletebooks();
 void searchbooks();
 void issuebooks();
+void viewbooks();
 int getdata();
 int checkid(int);
 void returnfunc();
+void issuerecord();
 
 
 char catagories[][15] = { "Computer","Electronics","Electrical","Civil","Mechnnical","Architecture" };
@@ -94,7 +96,7 @@ void mainmenu()
 	case '4':
 		issuebooks();
 	case '5':
-
+		viewbooks();
 	case '6':
 
 	case '7':
@@ -385,6 +387,8 @@ void searchbooks()
 }
 
 
+
+
 void issuebooks()
 {
 	int t;
@@ -456,7 +460,7 @@ void issuebooks()
 
 				if (a.duedate.mm > 12)
 				{
-					a.duedate.yy = a.duedate.yy +  a.duedate.mm / 12;
+					a.duedate.yy = a.duedate.yy + a.duedate.mm / 12;
 					a.duedate.mm = a.duedate.mm - 12;
 				}
 
@@ -475,8 +479,12 @@ void issuebooks()
 			gotoxy(10, 15);
 			printf("Issue any more? y.n ");
 			fflush(stdin);
-			another = getche();
+			if (getch() == 'n')
+				mainmenu();
+			else
+
 			fclose(fp);
+			
 		}
 		break;
 	case '2':
@@ -486,16 +494,16 @@ void issuebooks()
 		printf("*******************************Issued book list*******************************\n");
 		gotoxy(2, 2);
 		printf("STUDENT NAME    CATEGORY    ID    BOOK NAME    ISSUED DATE    RETURN DATE");
-		
+
 		fs = fopen("Issue.dat", "rb");			//open Issue.dat file
 		while (fread(&a, sizeof(a), 1, fs) == 1)
 		{
 			gotoxy(2, j);
 			printf("%s", a.stname);  //printf("Enter student name"); scanf("%s", a.stname);
-		
+
 			gotoxy(18, j);
 			printf("%s", a.cat);
-		
+
 			gotoxy(30, j);
 			printf("%d", a.id);
 
@@ -515,7 +523,46 @@ void issuebooks()
 		returnfunc();
 	}
 	break;
-	
+
+	case '3':		//search books by Id
+	{
+		system("cls");
+		gotoxy(10, 6);
+		printf("Enter book ID");
+		int p; int c = 0;
+
+		char another = 'y';
+		while (another == 'y')
+		{
+			scanf("%d", &p);
+			fs = fopen("Issue.dat", "rb");
+			while (fread(&a, sizeof(a), 1, fs) == 1)
+			{
+				if (a.id = p)
+				{
+					issuerecord();
+					gotoxy(10, 12);
+					printf("press any key");
+					getch();
+					issuerecord();
+					c = 1;
+				}
+			}
+			fflush(stdin);
+			fclose(fp);
+
+			if (c == 0)
+			{
+				gotoxy(10, 8);
+				printf("No record found");
+			}
+			gotoxy(10, 13);
+			printf("Try another search? y.n");
+			another = getch();
+		}
+	}
+	break;
+
 	}
 }
 
@@ -524,6 +571,53 @@ void issuebooks()
 
 
 
+
+void viewbooks()		//show the lists of book
+{
+	int i = 0; int j;
+	system("cls");
+	gotoxy(1, 1);
+	printf("*********************************Book List*****************************");
+	gotoxy(2, 2);
+	printf(" CATEGORY     ID    BOOK NAME     AUTHOR       QTY     PRICE     RackNo ");
+	j = 4;
+	fp = fopen("Bibek.dat", "rb+");
+	//rewind(fp);
+
+	fseek(fp, 0, SEEK_END);
+	while (fread(&a, sizeof(a), 1, fp) == 1)
+	{
+		gotoxy(3, j);
+		printf("%s", a.cat);
+
+		gotoxy(16, j);
+		printf("%d", a.id);
+
+		gotoxy(22, j);
+		printf("%s", a.name);
+
+		gotoxy(36, j);
+		printf("%s", a.Author);
+		
+		gotoxy(50, j);
+		printf("%d", a.quantity);
+		
+		gotoxy(57, j);
+		printf("%f", a.Price);
+
+		gotoxy(69, j);
+		printf("%d", a.rackno);
+		j++;
+		i = i + a.quantity;
+	}
+
+	gotoxy(3, 25);
+	printf("Total books = %d", i);
+	fclose(fp);
+	gotoxy(35, 25);
+	returnfunc();
+
+}
 
 
 
@@ -656,9 +750,26 @@ a:
 }
 
 
+void issuerecord()	//display issued books information
+{
+	system("cls");
+	gotoxy(10, 8);
+	printf("The book had taken by Mr %s ", a.stname);
+	gotoxy(10, 9);
+	printf("Issued Date %d %d %d", a.issued.dd, a.issued.mm, a.issued.yy);
+	gotoxy(10, 10);
+	printf("Returning Date %d %d %d", a.duedate.dd, a.duedate.mm, a.duedate.yy);
+}
+
 int main()
 {
 	Password();
 	getch();
 	return 0;
-};
+}
+
+
+
+
+//viewbooks() --error... opening file
+//issuebooks()
