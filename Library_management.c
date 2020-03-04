@@ -15,6 +15,7 @@ void deletebooks();
 void searchbooks();
 void issuebooks();
 void viewbooks();
+void editbooks();
 int getdata();
 int checkid(int);
 void returnfunc();
@@ -98,7 +99,7 @@ void mainmenu()
 	case '5':
 		viewbooks();
 	case '6':
-
+		editbooks();
 	case '7':
 	{
 		int i;
@@ -622,6 +623,66 @@ void viewbooks()		//show the lists of book
 
 
 
+
+void editbooks()
+{
+	system("cls");
+	int c = 0;
+	int d, e;
+	gotoxy(20, 4);
+	printf("****Edit Books Section****");
+	char another = 'y';
+	while (another == 'y')
+	{
+		system("cls");
+		gotoxy(15, 6);
+		printf("Enter book ID to be edited");
+		scanf("%d", &d);
+		fp = fopen("Bibek.dat", "rb+");
+		while (fread(&a, sizeof(a), 1, fp) == 1)
+		{
+			if (checkid(d) == 0)
+			{
+				gotoxy(15, 7);
+				printf("The book is available");
+				gotoxy(15, 8);
+				printf("The book id is %d ", a.id);
+				gotoxy(15, 9);
+				printf("Enter new name");
+				scanf("%s", a.name);
+				gotoxy(15, 10);
+				printf("Enter new Author:"); scanf("%s", a.Author);
+				gotoxy(15, 11);
+				printf("Enter new quantity:"); scanf("%d", &a.quantity);
+				gotoxy(15, 12);
+				printf("Enter new price:"); scanf("%f", &a.Price);
+				gotoxy(15, 13);
+				printf("Enter new rackno:"); scanf("%d", &a.rackno);
+				gotoxy(15, 14);
+				printf("The record is modified");
+
+				fseek(fp, ftell(fp) - sizeof(a), 0);
+				fwrite(&a, sizeof(a), 1, fp);
+				fclose(fp);
+				c = 1;
+			}
+			if (c == 0)
+			{
+				gotoxy(15, 9);
+				printf("No Record Found");
+			}
+		}
+		gotoxy(15, 16);
+		printf("Modify another record? y.n");
+		fflush(stdin);
+		another = getch();
+	
+	}
+	returnfunc();
+
+}
+
+
 void Password()
 {
 	system("cls");
@@ -767,9 +828,3 @@ int main()
 	getch();
 	return 0;
 }
-
-
-
-
-//viewbooks() --error... opening file
-//issuebooks()
