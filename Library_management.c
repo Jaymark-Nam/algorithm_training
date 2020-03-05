@@ -6,7 +6,7 @@
 #include <ctype.h>			//contains toupper(), tolower()..
 #include <dos.h>			//contains _dos_getdate
 #include <time.h>
-
+//-
 #define RETURNTIME 15
 /* */
 void mainmenu();
