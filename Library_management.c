@@ -6,7 +6,7 @@
 #include <ctype.h>			//contains toupper(), tolower()..
 #include <dos.h>			//contains _dos_getdate
 #include <time.h>
-
+//-
 #define RETURNTIME 15
 /* */
 void mainmenu();
@@ -74,7 +74,7 @@ void mainmenu()
 	gotoxy(20, 9);
 	printf("3. Search Books");
 	gotoxy(20, 11);
-	printf("4. Issue Books");
+	printf("4. Borrow Books");
 	gotoxy(20, 13);
 	printf("5. View Book list");
 	gotoxy(20, 15);
@@ -484,8 +484,8 @@ void issuebooks()
 				mainmenu();
 			else
 
-			fclose(fp);
-			
+				fclose(fp);
+
 		}
 		break;
 	case '2':
@@ -572,8 +572,10 @@ void issuebooks()
 
 
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-void viewbooks()		//show the lists of book
+
+void viewbooks()		//show the lists of book 
 {
 	int i = 0; int j;
 	system("cls");
@@ -583,9 +585,8 @@ void viewbooks()		//show the lists of book
 	printf(" CATEGORY     ID    BOOK NAME     AUTHOR       QTY     PRICE     RackNo ");
 	j = 4;
 	fp = fopen("Bibek.dat", "rb+");
-	//rewind(fp);
-
-	fseek(fp, 0, SEEK_END);
+	
+	
 	while (fread(&a, sizeof(a), 1, fp) == 1)
 	{
 		gotoxy(3, j);
@@ -599,10 +600,10 @@ void viewbooks()		//show the lists of book
 
 		gotoxy(36, j);
 		printf("%s", a.Author);
-		
+
 		gotoxy(50, j);
 		printf("%d", a.quantity);
-		
+
 		gotoxy(57, j);
 		printf("%f", a.Price);
 
@@ -620,7 +621,7 @@ void viewbooks()		//show the lists of book
 
 }
 
-
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 
@@ -676,7 +677,7 @@ void editbooks()
 		printf("Modify another record? y.n");
 		fflush(stdin);
 		another = getch();
-	
+
 	}
 	returnfunc();
 
@@ -797,7 +798,7 @@ int checkid(int t)
 			return 0; // if book exists
 	return 1; //return 1 if it doesnt exist
 }
-//
+
 void returnfunc()
 {
 	{
