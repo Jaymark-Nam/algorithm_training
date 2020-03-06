@@ -6,7 +6,7 @@
 #include <ctype.h>			//contains toupper(), tolower()..
 #include <dos.h>			//contains _dos_getdate
 #include <time.h>
-//-
+
 #define RETURNTIME 15
 /* */
 void mainmenu();
@@ -797,7 +797,7 @@ int checkid(int t)
 			return 0; // if book exists
 	return 1; //return 1 if it doesnt exist
 }
-
+//
 void returnfunc()
 {
 	{
