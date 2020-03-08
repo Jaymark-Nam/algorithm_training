@@ -584,10 +584,19 @@ void viewbooks()		//show the lists of book
 	gotoxy(2, 2);
 	printf(" CATEGORY     ID    BOOK NAME     AUTHOR       QTY     PRICE     RackNo ");
 	j = 4;
-	fp = fopen("Bibek.dat", "rb+");
-	
-	
-	while (fread(&a, sizeof(a), 1, fp) == 1)
+	fp = fopen("Bibek.dat", "rb+");		//1. 파일포인터 fopen 후,
+
+	// ※ file I/O 프로그래밍을 할 때 습관적으로 파일포인터가 NULL인지 체크하는 것도 중요함.
+	if (fp == NULL) {
+		printf("Could not found this file.");
+
+		return;
+	}
+
+	unsigned int fp_result;							// 반환값을 확인해보기 위한 임시 변수
+	fp_result = fread(&a, sizeof(a), 1, fp);		//2. 일단 한번 읽어들여줘야함. 
+
+	while (!feof(fp))								//3. 파일의 끝인지 확인
 	{
 		gotoxy(3, j);
 		printf("%s", a.cat);
@@ -611,6 +620,8 @@ void viewbooks()		//show the lists of book
 		printf("%d", a.rackno);
 		j++;
 		i = i + a.quantity;
+
+		fp_result = fread(&a, sizeof(a), 1, fp);		//4. loop를 원활하게 하기 위해 fread를 while문 맨 마지막에 써줌.
 	}
 
 	gotoxy(3, 25);
@@ -618,8 +629,8 @@ void viewbooks()		//show the lists of book
 	fclose(fp);
 	gotoxy(35, 25);
 	returnfunc();
-
 }
+
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
