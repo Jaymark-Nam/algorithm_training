@@ -27,7 +27,7 @@ void gotoxy(int x, int y)
 {
 	coord.X = x;
 	coord.Y = y;		//X and Y coordinates
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);	//#include <windows.h>
 }
 
 
@@ -101,11 +101,12 @@ void addrecord()
 	gotoxy(10, 10);
 	printf(" WELCOME TO THE ADD MENU *");
 	printf("\n\n\tENTER DATE OF YOUR RECORD:[yyyy-mm-dd]:");
-	fflush(stdin);
-	gets(filename);
+	fflush(stdin);	//flushes the output buffer of a stream.
+	gets(filename);	// *gets(char *str) reads a line from stdin and stores it into the string pointed to by str
 
-	fp = fopen(filename, "ab+");
-	
+	fp = fopen(filename, "ab+");	//Open a binary file in append mode for reading or updating at the end of the file. fopen() creates the file if it does not exist.
+
+
 	//if file is empty
 	if (fp == NULL)
 	{
@@ -119,16 +120,19 @@ void addrecord()
 		}
 	}
 
+
 	while (another == 'Y' || another == 'y')
 	{
 		choice = 0;
 		fflush(stdin);
-		rewind(fp);
+		rewind(fp);	//rewind function sets the file position to the beginning of the file
+					// It also clears the error and end-of-file indicators for stream
+
 
 		//if file exists already
 		while (fread(&e, sizeof(e), 1, fp) == 1)
 		{
-			if (strcmp(e.time, time) == 0)
+			if (strcmp(e.time, time) == 0)	// if e.time 
 			{
 				printf("\n\tTHE RECORD ALREADY EXISTS.\n");
 				choice = 1;
@@ -138,18 +142,21 @@ void addrecord()
 
 		if (choice == 0)
 		{
-			strcpy(e.time, time);
-			
-			printf("\tENTER NAME:");
+			fflush(stdin);
+			strcpy(e.time, time);		//time ---too---> e.time 
+			gotoxy(10, 14);
+			printf("ENTER NAME:");
 			fflush(stdin);
 			gets(e.name);
 			fflush(stdin);
 			
-			printf("\tENTER PLACE:");
+			gotoxy(10, 15);
+			printf("ENTER PLACE:");
 			gets(e.place);
 			fflush(stdin);
-			
-			printf("\tNOTE:");
+
+			gotoxy(10, 16);
+			printf("NOTE:");
 			gets(e.note);
 
 			fwrite(&e, sizeof(e), 1, fp);
@@ -159,12 +166,19 @@ void addrecord()
 		}
 
 		printf("\n\tADD ANOTHER RECORD...(Y/N) ");
-
+		
 		fflush(stdin);
 
 		another = getchar();
+		if (another == 'y' || another == 'Y')
+		{
+			gotoxy(10, 10);
+			system("cls");
+
+		}
 
 	}
+
 	fclose(fp);
 	printf("\n\n\tPRESS ANY KEY TO EXIT...");
 	getch();
@@ -182,7 +196,7 @@ void viewrecord()
 	int ch;
 
 	gotoxy(10, 10);
-	printf("\t\t* HERE IS THE VIEWING MENU *");
+	printf("* HERE IS THE VIEWING MENU *");
 
 	choice = password();
 
@@ -194,20 +208,15 @@ void viewrecord()
 	{
 		printf("\n\tENTER THE DATE OF RECORD TO BE VIEWED:[yyyy-mm-dd]:");
 		fflush(stdin);
-		gets(filename);
-		fpte = fopen(filename, "rb");
-		if (fpte == NULL)
+		gets(filename);		//press the filename
 
+		fpte = fopen(filename, "rb");	//fpte : open filename in reading mode
+		if (fpte == NULL)	//if fpte cant open the file
 		{
-
 			puts("\nTHE RECORD DOES NOT EXIST...\n");
-
 			printf("PRESS ANY KEY TO EXIT...");
-
 			getch();
-
 			return;
-
 		}
 
 		system("cls");
@@ -275,8 +284,6 @@ void viewrecord()
 					printf("\nMEETING WITH: %s", customer.name);
 
 					printf("\nMEETING AT: %s", customer.place);
-
-					printf("\nDUARATION: %s", customer.duration);
 
 					printf("\nNOTE: %s", customer.note);
 
