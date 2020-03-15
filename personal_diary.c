@@ -11,17 +11,21 @@ void editrecord();
 void editpassword();
 void deleterecord();
 
+FILE *fp;
 COORD coord = { 0,0 };
 
 
 struct record
 {
 	char time[6];
+	char number[5];
 	char name[30];
 	char place[25];
 	char duration[10];
 	char note[500];
 };
+struct record e;
+struct record customer;
 
 void gotoxy(int x, int y)
 {
@@ -93,9 +97,9 @@ int main()
 void addrecord()
 {
 	system("cls");
-	FILE *fp;
-	char another = 'Y', time[10];
-	struct record e;
+	//FILE *fp;
+	char another = 'Y', time[10], number[10];
+	//struct record e;
 	char filename[15];
 	int choice;
 	gotoxy(10, 10);
@@ -103,6 +107,8 @@ void addrecord()
 	printf("\n\n\tENTER DATE OF YOUR RECORD:[yyyy-mm-dd]:");
 	fflush(stdin);	//flushes the output buffer of a stream.
 	gets(filename);	// *gets(char *str) reads a line from stdin and stores it into the string pointed to by str
+
+	gotoxy(10, 13);
 
 	fp = fopen(filename, "ab+");	//Open a binary file in append mode for reading or updating at the end of the file. fopen() creates the file if it does not exist.
 
@@ -137,7 +143,6 @@ void addrecord()
 				printf("\n\tTHE RECORD ALREADY EXISTS.\n");
 				choice = 1;
 			}
-
 		}
 
 		if (choice == 0)
@@ -162,7 +167,7 @@ void addrecord()
 			fwrite(&e, sizeof(e), 1, fp);
 
 			printf("\nYOUR RECORD IS ADDED...\n");
-
+			
 		}
 
 		printf("\n\tADD ANOTHER RECORD...(Y/N) ");
@@ -174,7 +179,6 @@ void addrecord()
 		{
 			gotoxy(10, 10);
 			system("cls");
-
 		}
 
 	}
@@ -210,73 +214,64 @@ void viewrecord()
 		fflush(stdin);
 		gets(filename);		//press the filename
 
-		fpte = fopen(filename, "rb");	//fpte : open filename in reading mode
-		if (fpte == NULL)	//if fpte cant open the file
+		fp = fopen(filename, "rb+");	//fpte : open filename in reading mode
+		if (fp == NULL)	//if fpte cant open the file
 		{
 			puts("\nTHE RECORD DOES NOT EXIST...\n");
 			printf("PRESS ANY KEY TO EXIT...");
 			getch();
 			return;
 		}
+		unsigned int fp_result;
+		fp_result = fread(&customer, sizeof(customer), 1, fp);
 
-		system("cls");
+		system("cls");		//this cleans the screen~
 
-		printf("\n\tHOW WOULD YOU LIKE TO VIEW:\n");
+		gotoxy(10, 10);
+		printf("\tHOW WOULD YOU LIKE TO VIEW:\n");
 
-		printf("\n\t1.WHOLE RECORD OF THE DAY.");
+		gotoxy(10, 11);
+		printf("\t1.WHOLE RECORD OF THE DAY.");
 
-		printf("\n\t2.RECORD OF FIX TIME.");
+		gotoxy(10, 12);
+		printf("\t2.BO BACK TO MAIN MENU.");
 
-		printf("\n\t\tENTER YOUR CHOICE:");
+		gotoxy(10, 13);
+		printf("\t\tENTER YOUR CHOICE:");
 
-		scanf("%d", &ch);
-
+		ch = getch();
 		switch (ch)
-
 		{
-
-		case 1:
-
+		case '1':
 			printf("\nTHE WHOLE RECORD FOR %s IS:", filename);
 
-			while (fread(&customer, sizeof(customer), 1, fpte) == 1)
 
+//			while (fread(&customer, sizeof(customer), 1, fp) == 1)
+			while(!feof(fp))
 			{
-
 				printf("\n");
 
-				printf("\nTIME: %s", customer.time);
+				printf("\Name: %s", e.name);
 
-				printf("\nMEETING WITH: %s", customer.name);
+				printf("\Place: %s", e.place);
 
-				printf("\nMEETING AT: %s", customer.place);
-
-				printf("\nDURATION: %s", customer.duration);
-
-				printf("\nNOTE: %s", customer.note);
+				printf("\nNOTE: %s", e.note);
 
 				printf("\n");
-
+				fp_result = fread(&customer, sizeof(customer), 1, fp);
 			}
-
 			break;
 
-		case 2:
-
+		case '2':
 			fflush(stdin);
-
-			printf("\nENTER TIME:[hh:mm]:");
-
+			gotoxy(10, 10);
+			printf("Go Back to Main menu");
+			/*
 			gets(time);
-
 			while (fread(&customer, sizeof(customer), 1, fpte) == 1)
-
 			{
-
 				if (strcmp(customer.time, time) == 0)
-
 				{
-
 					printf("\nYOUR RECORD IS:");
 
 					printf("\nTIME: %s", customer.time);
@@ -286,32 +281,21 @@ void viewrecord()
 					printf("\nMEETING AT: %s", customer.place);
 
 					printf("\nNOTE: %s", customer.note);
-
 				}
-
-			}
-
+			}*/
 			break;
-
 		default:
 			printf("\nYOU TYPED SOMETHING ELSE...\n");
-
 			break;
-
 		}
-
 		printf("\n\nWOULD YOU LIKE TO CONTINUE VIEWING...(Y/N):");
-
 		fflush(stdin);
 
 		scanf("%c", &choice);
-
 	} while (choice == 'Y' || choice == 'y');
 
-	fclose(fpte);
-
+	fclose(fp);
 	return;
-
 }
 
 void editrecord()
@@ -322,7 +306,6 @@ void editrecord()
 
 	FILE *fpte;
 
-	struct record customer;
 
 	char time[6], choice, filename[14];
 
