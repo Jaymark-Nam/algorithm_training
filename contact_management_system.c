@@ -4,7 +4,7 @@
 #include<process.h>
 #include<stdlib.h>
 #include<dos.h>
-
+//
 struct contact
 {
 	long ph;
