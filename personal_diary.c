@@ -104,19 +104,18 @@ void addrecord()
 	int choice;
 	gotoxy(10, 10);
 	printf(" WELCOME TO THE ADD MENU *");
-	printf("\n\n\tENTER DATE OF YOUR RECORD:[yyyy-mm-dd]:");
+	//printf("\n\n\tENTER DATE OF YOUR RECORD:[yyyy-mm-dd]:");
 	fflush(stdin);	//flushes the output buffer of a stream.
-	gets(filename);	// *gets(char *str) reads a line from stdin and stores it into the string pointed to by str
+	//gets(filename);	// *gets(char *str) reads a line from stdin and stores it into the string pointed to by str
 
 	gotoxy(10, 13);
 
-	fp = fopen(filename, "ab+");	//Open a binary file in append mode for reading or updating at the end of the file. fopen() creates the file if it does not exist.
-
+	fp = fopen("file.dat", "ab+");	//Open a binary file in append mode for reading or updating at the end of the file. fopen() creates the file if it does not exist.
 
 	//if file is empty
 	if (fp == NULL)
 	{
-		fp = fopen(filename, "wb+");
+		fp = fopen("file.dat", "wb+");
 		if (fp == NULL)
 		{
 			printf("\nSYSTEM ERROR...");
@@ -134,7 +133,7 @@ void addrecord()
 		rewind(fp);	//rewind function sets the file position to the beginning of the file
 					// It also clears the error and end-of-file indicators for stream
 
-
+		/*
 		//if file exists already
 		while (fread(&e, sizeof(e), 1, fp) == 1)
 		{
@@ -144,11 +143,15 @@ void addrecord()
 				choice = 1;
 			}
 		}
-
+		*/
 		if (choice == 0)
 		{
+			/*
+			gotoxy(10, 13);
+			gets(filename);
 			fflush(stdin);
 			strcpy(e.time, time);		//time ---too---> e.time 
+			*/
 			gotoxy(10, 14);
 			printf("ENTER NAME:");
 			fflush(stdin);
@@ -163,7 +166,7 @@ void addrecord()
 			gotoxy(10, 16);
 			printf("NOTE:");
 			gets(e.note);
-
+			fseek(fp, 0, SEEK_CUR);
 			fwrite(&e, sizeof(e), 1, fp);
 
 			printf("\nYOUR RECORD IS ADDED...\n");
@@ -192,10 +195,9 @@ void addrecord()
 
 void viewrecord()
 {
-	FILE *fpte;
+	//FILE *fpte;
 	system("cls");
-	struct record customer;
-
+	int i = 0; int j= 3 ;
 	char time[6], choice, filename[14];
 	int ch;
 
@@ -204,17 +206,66 @@ void viewrecord()
 
 	choice = password();
 
+	system("cls");
+	
 	if (choice != 0)
 	{
 		return;
 	}
+	
+	fp = fopen("file.dat", "rb+");
+
+	if (fp == NULL)
+	{
+		printf("Cant find the file");
+		getch();
+		return;
+	}
+
+	char c;
+	while ((c = fgets(&e,100,fp)) != EOF) {
+		printf("%s", e.name);
+		
+		printf("%s", e.place);
+	
+		printf("%s", e.note);
+	}
+
+
+
+	/*
+	unsigned fp_result;
+	fp_result = fread(&e, sizeof(e), 1, fp);
+	fseek(fp, 0, SEEK_SET);
+
+	while (!feof(fp))
+	{
+		Sleep(1000);
+
+			gotoxy(3, j);
+			printf("%s", e.name);
+			gotoxy(10, j);
+			printf("%s", e.place);
+			gotoxy(18, j);
+			printf("%s", e.note);
+
+			j = j + 3;
+			fp_result = fread(&e, sizeof(e), 1, fp);
+
+		
+		getch();
+		return;
+	}*/
+	fclose(fp);
+	return;
+	/*
 	do
 	{
-		printf("\n\tENTER THE DATE OF RECORD TO BE VIEWED:[yyyy-mm-dd]:");
+		//printf("\n\tENTER THE DATE OF RECORD TO BE VIEWED:[yyyy-mm-dd]:");
 		fflush(stdin);
-		gets(filename);		//press the filename
+		//gets(filename);		//press the filename
 
-		fp = fopen(filename, "rb+");	//fpte : open filename in reading mode
+		fp = fopen("file.dat", "rb+");	//fpte : open filename in reading mode
 		if (fp == NULL)	//if fpte cant open the file
 		{
 			puts("\nTHE RECORD DOES NOT EXIST...\n");
@@ -282,7 +333,7 @@ void viewrecord()
 
 					printf("\nNOTE: %s", customer.note);
 				}
-			}*/
+			}
 			break;
 		default:
 			printf("\nYOU TYPED SOMETHING ELSE...\n");
@@ -293,9 +344,9 @@ void viewrecord()
 
 		scanf("%c", &choice);
 	} while (choice == 'Y' || choice == 'y');
+	*/
 
-	fclose(fp);
-	return;
+
 }
 
 void editrecord()
