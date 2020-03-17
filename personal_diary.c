@@ -238,7 +238,7 @@ void viewrecord()
 	fp_result = fread(&e, sizeof(e), 1, fp);
 	fseek(fp, 0, SEEK_SET);
 
-	while (!feof(fp))
+	while (!feof(fp))	//yes I got it!!!! 2020_03_17
 	{
 	Sleep(1000);
 	gotoxy(3, j);
@@ -250,8 +250,12 @@ void viewrecord()
 	j = j + 3;
 	fp_result = fread(&e, sizeof(e), 1, fp);
 
-	if(getch())
+	if (feof(fp))	//good idea 
+	{
+		getch();
 		return;
+	}
+	//if(getch()) return;
 	}
 	fclose(fp);
 	return;
