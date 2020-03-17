@@ -58,7 +58,7 @@ int main()
 		printf("[6] EXIT");
 		gotoxy(10, 14);
 		printf("ENTER YOUR CHOICE:");
-		
+
 		ch = getch();
 		switch (ch)
 		{
@@ -74,7 +74,7 @@ int main()
 		case '4':
 			deleterecord();
 			break;
-		case '5':  
+		case '5':
 			editpassword();
 			break;
 		case '6':
@@ -106,13 +106,13 @@ void addrecord()
 	printf(" WELCOME TO THE ADD MENU *");
 	//printf("\n\n\tENTER DATE OF YOUR RECORD:[yyyy-mm-dd]:");
 	fflush(stdin);	//flushes the output buffer of a stream.
-	//gets(filename);	// *gets(char *str) reads a line from stdin and stores it into the string pointed to by str
+					//gets(filename);	// *gets(char *str) reads a line from stdin and stores it into the string pointed to by str
 
 	gotoxy(10, 13);
 
 	fp = fopen("file.dat", "ab+");	//Open a binary file in append mode for reading or updating at the end of the file. fopen() creates the file if it does not exist.
 
-	//if file is empty
+									//if file is empty
 	if (fp == NULL)
 	{
 		fp = fopen("file.dat", "wb+");
@@ -133,31 +133,31 @@ void addrecord()
 		rewind(fp);	//rewind function sets the file position to the beginning of the file
 					// It also clears the error and end-of-file indicators for stream
 
-		/*
-		//if file exists already
-		while (fread(&e, sizeof(e), 1, fp) == 1)
-		{
-			if (strcmp(e.time, time) == 0)	// if e.time 
-			{
-				printf("\n\tTHE RECORD ALREADY EXISTS.\n");
-				choice = 1;
-			}
-		}
-		*/
+					/*
+					//if file exists already
+					while (fread(&e, sizeof(e), 1, fp) == 1)
+					{
+					if (strcmp(e.time, time) == 0)	// if e.time
+					{
+					printf("\n\tTHE RECORD ALREADY EXISTS.\n");
+					choice = 1;
+					}
+					}
+					*/
 		if (choice == 0)
 		{
 			/*
 			gotoxy(10, 13);
 			gets(filename);
 			fflush(stdin);
-			strcpy(e.time, time);		//time ---too---> e.time 
+			strcpy(e.time, time);		//time ---too---> e.time
 			*/
 			gotoxy(10, 14);
 			printf("ENTER NAME:");
 			fflush(stdin);
 			gets(e.name);
 			fflush(stdin);
-			
+
 			gotoxy(10, 15);
 			printf("ENTER PLACE:");
 			gets(e.place);
@@ -170,11 +170,11 @@ void addrecord()
 			fwrite(&e, sizeof(e), 1, fp);
 
 			printf("\nYOUR RECORD IS ADDED...\n");
-			
+
 		}
 
 		printf("\n\tADD ANOTHER RECORD...(Y/N) ");
-		
+
 		fflush(stdin);
 
 		another = getchar();
@@ -197,22 +197,22 @@ void viewrecord()
 {
 	//FILE *fpte;
 	system("cls");
-	int i = 0; int j= 3 ;
+	int i = 0; int j = 3;
 	char time[6], choice, filename[14];
 	int ch;
 
 	gotoxy(10, 10);
 	printf("* HERE IS THE VIEWING MENU *");
 
-	choice = password();
+	/*choice = password();
 
 	system("cls");
-	
+
 	if (choice != 0)
 	{
 		return;
 	}
-	
+	*/
 	fp = fopen("file.dat", "rb+");
 
 	if (fp == NULL)
@@ -221,128 +221,106 @@ void viewrecord()
 		getch();
 		return;
 	}
-
+	/*
 	char c;
-	while ((c = fgets(&e,100,fp)) != EOF) {
+	while ((c = fgets(&e, 100, fp)) != EOF) {
 		printf("%s", e.name);
-		
+
 		printf("%s", e.place);
-	
+
 		printf("%s", e.note);
 	}
 
-
-
-	/*
+	*/
+	system("cls");
+	
 	unsigned fp_result;
 	fp_result = fread(&e, sizeof(e), 1, fp);
 	fseek(fp, 0, SEEK_SET);
 
 	while (!feof(fp))
 	{
-		Sleep(1000);
+	Sleep(1000);
+	gotoxy(3, j);
+	printf("%s", e.name);
+	gotoxy(10, j);
+	printf("%s", e.place);
+	gotoxy(18, j);
+	printf("%s", e.note);
+	j = j + 3;
+	fp_result = fread(&e, sizeof(e), 1, fp);
 
-			gotoxy(3, j);
-			printf("%s", e.name);
-			gotoxy(10, j);
-			printf("%s", e.place);
-			gotoxy(18, j);
-			printf("%s", e.note);
-
-			j = j + 3;
-			fp_result = fread(&e, sizeof(e), 1, fp);
-
-		
-		getch();
+	if(getch())
 		return;
-	}*/
+	}
 	fclose(fp);
 	return;
 	/*
 	do
 	{
-		//printf("\n\tENTER THE DATE OF RECORD TO BE VIEWED:[yyyy-mm-dd]:");
-		fflush(stdin);
-		//gets(filename);		//press the filename
-
-		fp = fopen("file.dat", "rb+");	//fpte : open filename in reading mode
-		if (fp == NULL)	//if fpte cant open the file
-		{
-			puts("\nTHE RECORD DOES NOT EXIST...\n");
-			printf("PRESS ANY KEY TO EXIT...");
-			getch();
-			return;
-		}
-		unsigned int fp_result;
-		fp_result = fread(&customer, sizeof(customer), 1, fp);
-
-		system("cls");		//this cleans the screen~
-
-		gotoxy(10, 10);
-		printf("\tHOW WOULD YOU LIKE TO VIEW:\n");
-
-		gotoxy(10, 11);
-		printf("\t1.WHOLE RECORD OF THE DAY.");
-
-		gotoxy(10, 12);
-		printf("\t2.BO BACK TO MAIN MENU.");
-
-		gotoxy(10, 13);
-		printf("\t\tENTER YOUR CHOICE:");
-
-		ch = getch();
-		switch (ch)
-		{
-		case '1':
-			printf("\nTHE WHOLE RECORD FOR %s IS:", filename);
-
-
-//			while (fread(&customer, sizeof(customer), 1, fp) == 1)
-			while(!feof(fp))
-			{
-				printf("\n");
-
-				printf("\Name: %s", e.name);
-
-				printf("\Place: %s", e.place);
-
-				printf("\nNOTE: %s", e.note);
-
-				printf("\n");
-				fp_result = fread(&customer, sizeof(customer), 1, fp);
-			}
-			break;
-
-		case '2':
-			fflush(stdin);
-			gotoxy(10, 10);
-			printf("Go Back to Main menu");
-			/*
-			gets(time);
-			while (fread(&customer, sizeof(customer), 1, fpte) == 1)
-			{
-				if (strcmp(customer.time, time) == 0)
-				{
-					printf("\nYOUR RECORD IS:");
-
-					printf("\nTIME: %s", customer.time);
-
-					printf("\nMEETING WITH: %s", customer.name);
-
-					printf("\nMEETING AT: %s", customer.place);
-
-					printf("\nNOTE: %s", customer.note);
-				}
-			}
-			break;
-		default:
-			printf("\nYOU TYPED SOMETHING ELSE...\n");
-			break;
-		}
-		printf("\n\nWOULD YOU LIKE TO CONTINUE VIEWING...(Y/N):");
-		fflush(stdin);
-
-		scanf("%c", &choice);
+	//printf("\n\tENTER THE DATE OF RECORD TO BE VIEWED:[yyyy-mm-dd]:");
+	fflush(stdin);
+	//gets(filename);		//press the filename
+	fp = fopen("file.dat", "rb+");	//fpte : open filename in reading mode
+	if (fp == NULL)	//if fpte cant open the file
+	{
+	puts("\nTHE RECORD DOES NOT EXIST...\n");
+	printf("PRESS ANY KEY TO EXIT...");
+	getch();
+	return;
+	}
+	unsigned int fp_result;
+	fp_result = fread(&customer, sizeof(customer), 1, fp);
+	system("cls");		//this cleans the screen~
+	gotoxy(10, 10);
+	printf("\tHOW WOULD YOU LIKE TO VIEW:\n");
+	gotoxy(10, 11);
+	printf("\t1.WHOLE RECORD OF THE DAY.");
+	gotoxy(10, 12);
+	printf("\t2.BO BACK TO MAIN MENU.");
+	gotoxy(10, 13);
+	printf("\t\tENTER YOUR CHOICE:");
+	ch = getch();
+	switch (ch)
+	{
+	case '1':
+	printf("\nTHE WHOLE RECORD FOR %s IS:", filename);
+	//			while (fread(&customer, sizeof(customer), 1, fp) == 1)
+	while(!feof(fp))
+	{
+	printf("\n");
+	printf("\Name: %s", e.name);
+	printf("\Place: %s", e.place);
+	printf("\nNOTE: %s", e.note);
+	printf("\n");
+	fp_result = fread(&customer, sizeof(customer), 1, fp);
+	}
+	break;
+	case '2':
+	fflush(stdin);
+	gotoxy(10, 10);
+	printf("Go Back to Main menu");
+	/*
+	gets(time);
+	while (fread(&customer, sizeof(customer), 1, fpte) == 1)
+	{
+	if (strcmp(customer.time, time) == 0)
+	{
+	printf("\nYOUR RECORD IS:");
+	printf("\nTIME: %s", customer.time);
+	printf("\nMEETING WITH: %s", customer.name);
+	printf("\nMEETING AT: %s", customer.place);
+	printf("\nNOTE: %s", customer.note);
+	}
+	}
+	break;
+	default:
+	printf("\nYOU TYPED SOMETHING ELSE...\n");
+	break;
+	}
+	printf("\n\nWOULD YOU LIKE TO CONTINUE VIEWING...(Y/N):");
+	fflush(stdin);
+	scanf("%c", &choice);
 	} while (choice == 'Y' || choice == 'y');
 	*/
 
