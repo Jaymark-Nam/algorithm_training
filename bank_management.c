@@ -22,7 +22,7 @@ struct {
     struct date withdraw;
 
     }add,upd,check,rem,transaction;
-
+//
 float interest(float t,float amount,int rate)
 {
     float SI;
