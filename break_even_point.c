@@ -13,3 +13,4 @@ int main()
 	printf(" %lf  %lf ", n, income);
 
 }
+//
