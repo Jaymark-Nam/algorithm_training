@@ -4,7 +4,7 @@
 #include <conio.h>
 #include <windows.h>
 #include <string.h>
-
+//
 COORD coord = { 0,0 };
 
 void gotoxy(int x, int y)
