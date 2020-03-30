@@ -31,7 +31,7 @@ char findbook;
 char password[10] = { "password" };
 
 
-void gotoxy(int x, int y)
+void gotoxy(int x, int y)		//this makes it to use gotoxy function
 {
 	coord.X = x;
 	coord.Y = y;		//X and Y coordinates
@@ -63,7 +63,7 @@ struct books a;
 void mainmenu()
 {
 	char choose;
-	system("cls");
+	system("cls");		//clean the screen like a wiper
 	int i;
 	gotoxy(20, 3);
 	printf("**Main Menu**");
@@ -85,11 +85,11 @@ void mainmenu()
 
 	printf("Enter your choice:");
 
-	choose = getch();
+	choose = getch();			//choose a num
 	switch (choose)
 	{
 	case '1':
-		addbooks();
+		addbooks();			//go to addbook() function!
 	case '2':
 		deletebooks();
 	case '3':
@@ -125,7 +125,7 @@ void mainmenu()
 		gotoxy(50, 30);
 		printf("Exiting in 3 second...........>");
 		Sleep(3000);
-		exit(0);
+		exit(0);			//exit the program
 	}
 	/*
 	default:
@@ -169,8 +169,10 @@ void addbooks()
 	printf("7. Back to Main menu");
 
 	gotoxy(20, 22);
+
 	printf("Enter your choice");
-	scanf("%d", &s);
+	scanf("%d", &s);			//your choice is 's'
+
 	if (s == 7)
 		mainmenu();
 
@@ -205,7 +207,7 @@ void deletebooks()
 		scanf("%d", &d);
 		fp = fopen("Bibek.dat", "rb+");  //Open fp,  BIBEK.DAT for both reading and writing in binary mode.
 		rewind(fp);
-		while (fread(&a, sizeof(a), 1, fp) == 1)
+		while (fread(&a, sizeof(a), 1, fp) == 1)		//while reading fp
 		{
 			if (a.id == d)
 			{
@@ -217,7 +219,7 @@ void deletebooks()
 
 				gotoxy(10, 9);
 				printf("Rack No. is %d", a.rackno);
-				findbook = 't';
+				findbook = 't';		//if there is a book
 			}
 		}
 		if (findbook != 't')
@@ -227,13 +229,13 @@ void deletebooks()
 			if (getch())
 				mainmenu();
 		}
-		if (findbook == 't')
+		if (findbook == 't')			//if there is a book
 		{
 			gotoxy(10, 9);
 			printf("Do you want to delete? y.n");
 			if (getch() == 'y')
 			{
-				ft = fopen("test.dat", "wb+");	//ft === temp file for delete  ...  wb indicates that the file is opened for writing in binary mode.
+				ft = fopen("test.dat", "wb+");		//ft === temp file for delete  ...  wb indicates that the file is opened for writing in binary mode.
 				rewind(fp);
 				while (fread(&a, sizeof(a), 1, fp) == 1)		//while you're reading "fp"
 				{
