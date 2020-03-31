@@ -148,24 +148,24 @@ void addrecord()
 		{
 			/*
 			gotoxy(10, 13);
-			gets(filename);
+			gets(filename);		//enter the file name
 			fflush(stdin);
 			strcpy(e.time, time);		//time ---too---> e.time
 			*/
 			gotoxy(10, 14);
 			printf("ENTER NAME:");
 			fflush(stdin);
-			gets(e.name);
+			gets(e.name);	//enter name
 			fflush(stdin);
 
 			gotoxy(10, 15);
 			printf("ENTER PLACE:");
-			gets(e.place);
+			gets(e.place);	//enter place
 			fflush(stdin);
 
 			gotoxy(10, 16);
 			printf("NOTE:");
-			gets(e.note);
+			gets(e.note);	//enter note
 			fseek(fp, 0, SEEK_CUR);
 			fwrite(&e, sizeof(e), 1, fp);
 
