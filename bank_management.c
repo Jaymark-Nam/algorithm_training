@@ -6,7 +6,7 @@ int main_exit;
 void menu();
 struct date{
     int month,day,year;
-
+//
     };
 struct {
 //
